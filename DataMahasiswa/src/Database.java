@@ -10,9 +10,9 @@ public class Database {
         return connection;
     }
 
-    public Database() {
+    public Database(String url, String user, String password){
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_mahasiswa", "dpbo", "pass");
+            connection = DriverManager.getConnection(url, user, password);
             statement = connection.createStatement();
         }catch (SQLException e) {
             throw new RuntimeException(e);

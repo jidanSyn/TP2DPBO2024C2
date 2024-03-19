@@ -64,7 +64,7 @@ public class Menu extends JFrame{
         // inisialisasi listMahasiswa
 //        listMahasiswa = new ArrayList<>();
 
-        database = new Database();
+        database = new Database("jdbc:mysql://localhost:3306/db_mahasiswa", "dpbo", "pass");
 
         // isi tabel mahasiswa
         mahasiswaTable.setModel(setTable());
