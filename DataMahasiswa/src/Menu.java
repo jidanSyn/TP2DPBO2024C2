@@ -11,6 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 public class Menu extends JFrame{
     public static void main(String[] args) {
@@ -168,8 +170,8 @@ public class Menu extends JFrame{
 
     public void insertData() {
         // ambil value dari textfield dan combobox
-        String nim = nimField.getText();
-        String nama = namaField.getText();
+        String nim = nimField.getText().trim();
+        String nama = namaField.getText().trim();
         String jenisKelamin = jenisKelaminComboBox.getSelectedItem().toString();
         String fakultas = fakultasComboBox.getSelectedItem().toString();
 
@@ -189,10 +191,11 @@ public class Menu extends JFrame{
             throw new RuntimeException(e);
         }
 
+        String insertQuery = "INSERT INTO mahasiswa (nim, nama, jenis_kelamin, fakultas) VALUES (?, ?, ?, ?)";
+        List<String> parameters = Arrays.asList(nim, nama, jenisKelamin, fakultas);
 
+        database.prepareAndExecute(insertQuery, parameters);
 
-        String sql = "INSERT INTO mahasiswa VALUES (null, '"+nim+"', '"+nama+"', '"+jenisKelamin+"', '"+fakultas+"');";
-        database.insertUpdateDeleteQuery(sql);
 
         // tambahkan data ke dalam list
         // update tabel
@@ -207,8 +210,8 @@ public class Menu extends JFrame{
 
     public void updateData() {
         // ambil data dari form
-        String nim = nimField.getText();
-        String nama = namaField.getText();
+        String nim = nimField.getText().trim();
+        String nama = namaField.getText().trim();
         String jenisKelamin = jenisKelaminComboBox.getSelectedItem().toString();
         String fakultas = fakultasComboBox.getSelectedItem().toString();
 
@@ -218,23 +221,28 @@ public class Menu extends JFrame{
             return;
         }
 
-        try {
-            if(database.recordExists("mahasiswa", "nim", nim)) {
-                String message = String.format("Mahasiswa with NIM: %s already exists.", nim);
-                JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            };
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        // ambil nim lama untuk referensi update
+        String oldNim = mahasiswaTable.getModel().getValueAt(selectedIndex, 1).toString();
+
+        // pengecekan apakah di ganti nim nya, jika diganti, perlu dicek apakah nim baru sudah ada di database
+        if(!oldNim.equals(nim)) {
+            try {
+                if(database.recordExists("mahasiswa", "nim", nim) ) {
+                    String message = String.format("Mahasiswa with NIM: %s already exists.", nim);
+                    JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                };
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        String sql = String.format("""
-                UPDATE mahasiswa
-                SET nama = %s, jenis_kelamin = %s, fakultas = %s
-                WHERE nim = %s;
-                """,  nama, jenisKelamin, fakultas, nim);
+        String updateQuery = "UPDATE mahasiswa SET nim = ?, nama = ?, jenis_kelamin = ?, fakultas = ? WHERE nim = ?";
+        List<String> parameters = Arrays.asList(nim, nama, jenisKelamin, fakultas, oldNim);
 
-        database.insertUpdateDeleteQuery(sql);
+        database.prepareAndExecute(updateQuery, parameters);
+//        System.out.println("Rows affected: "+rowsAffected);
+
         // update tabel
         mahasiswaTable.setModel(setTable());
         // bersihkan form
@@ -243,14 +251,16 @@ public class Menu extends JFrame{
         System.out.println("Update berhasil!");
         JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
 
-
     }
 
     public void deleteData() {
         // hapus data dari list
-        String sql = String.format("DELETE FROM mahasiswa WHERE id = %d;", selectedIndex);
-        database.insertUpdateDeleteQuery(sql);
+        String selectedNim = mahasiswaTable.getModel().getValueAt(selectedIndex, 1).toString();
+        String deleteQuery = "DELETE FROM mahasiswa WHERE nim = ?;";
 
+        database.prepareAndExecute(deleteQuery, Arrays.asList(selectedNim));
+
+//        System.out.println(sql);
         // update tabel
         mahasiswaTable.setModel(setTable());
         // bersihkan form

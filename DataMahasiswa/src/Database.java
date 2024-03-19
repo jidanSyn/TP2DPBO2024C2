@@ -1,8 +1,14 @@
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class Database {
     private Connection connection;
     private Statement statement;
+
+    public Connection getConnection() {
+        return connection;
+    }
 
     public Database() {
         try {
@@ -25,6 +31,19 @@ public class Database {
     public int insertUpdateDeleteQuery(String sql) {
         try {
             return statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int prepareAndExecute(String query, List<String> parameters)  {
+        try (PreparedStatement statement = this.connection.prepareStatement(query)) {
+            // Bind parameters to prepared statement
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setObject(i + 1, parameters.get(i));
+            }
+            // Execute the update query
+            return statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
