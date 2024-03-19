@@ -4,11 +4,11 @@
 
 ### Melanjutkan dari Latihan Praktikum 5, tetapi sekarang mengambil data dari mysql
 
-Note: Saya membuat user mysql baru untuk koneksinya, dengan nama 'dpbo' dan passwordnya 'pass'
-Langkah yang saya lakukan untuk membuat user baru:
-Masuk ke root mysql, lalu eksekusi 
-CREATE USER 'dpbo'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON db_mahasiswa.* TO 'dpbo'@'localhost';
+Note: Saya membuat user mysql baru untuk koneksinya, dengan nama 'dpbo' dan passwordnya 'pass'\
+Langkah yang saya lakukan untuk membuat user baru:\
+Masuk ke root mysql, lalu eksekusi \
+CREATE USER 'dpbo'@'localhost';\
+GRANT SELECT, INSERT, UPDATE, DELETE ON db_mahasiswa.* TO 'dpbo'@'localhost';\
 ALTER USER 'dpbo'@'localhost' IDENTIFIED BY 'pass';
 
 - Modifikasi database mysql contoh dari modul untuk menambah kolom fakultas (file .sql)
