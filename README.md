@@ -15,14 +15,16 @@ ALTER USER 'dpbo'@'localhost' IDENTIFIED BY 'pass';
 - Membuat kelas Database.java
   ![image](https://github.com/jidanSyn/TP2DPBO2024C2/assets/114399924/dcdf5900-bb99-44ea-a3a9-42190b54ef89)
   
-  	- Mengganti fungsi insertUpdateDeleteQuery dengan prepareAndExecute agar lebih mudah menyusun string query dan anti SQL injection
+  	- Menambahkan fungsi untuk mengecek apakah record data sudah ada berdasarkan nim
+	  ![image](https://github.com/jidanSyn/TP2DPBO2024C2/assets/114399924/96fd7e49-5bd6-425e-ab91-52b7f29456dd)
+  
+  	- Mengganti fungsi insertUpdateDeleteQuery dengan prepareAndExecute agar lebih mudah menyusun string query dan anti SQL injection\
   	  ![image](https://github.com/jidanSyn/TP2DPBO2024C2/assets/114399924/d59de4e0-80b0-4378-9283-90ec82807c0d)
   	  	- contoh penggunaan pada insert data di Menu.java
   	  	  ![image](https://github.com/jidanSyn/TP2DPBO2024C2/assets/114399924/649902b5-56c0-4af4-8a82-fa2bdc672b83)
 
 
-     	- Menambahkan fungsi untuk mengecek apakah record data sudah ada berdasarkan nim
-  	  ![image](https://github.com/jidanSyn/TP2DPBO2024C2/assets/114399924/96fd7e49-5bd6-425e-ab91-52b7f29456dd)
+     	
   	  
 - Implementasi Manipulasi data di Menu.java  
 	  
